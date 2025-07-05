@@ -1,0 +1,8 @@
+[project]
+name = "spin-gravity"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "processing-py>=0.3.7",
+]
