@@ -26,15 +26,16 @@ class ShellPoint:
         self.m = 1
         self.f_c = f_c
         self.c = c
+        direction_to_center = self.c.x - self.x, self.c.y - self.y
+        self.r = (direction_to_center[0]**2 + direction_to_center[1]**2)**0.5
         self.v = self.calculate_initial_stable_velocity()
         self.rainbow = rainbow()
 
     def calculate_initial_stable_velocity(self):
         direction_to_center = self.c.x - self.x, self.c.y - self.y
-        h = (direction_to_center[0]**2 + direction_to_center[1]**2)**0.5
 
-        f_c_x = (direction_to_center[0]/h)**2 * self.f_c
-        f_c_y = (direction_to_center[1]/h)**2 * self.f_c
+        f_c_x = (direction_to_center[0]/self.r)**2 * self.f_c
+        f_c_y = (direction_to_center[1]/self.r)**2 * self.f_c
 
 
         r = ((self.x-self.c.x)**2 + (self.y-self.c.y)**2)**0.5
@@ -45,25 +46,21 @@ class ShellPoint:
 
 
     def update(self):
-        # print(f"Before: {self.x}")
         direction_to_center = self.c.x - self.x, self.c.y - self.y
-        h = (direction_to_center[0]**2 + direction_to_center[1]**2)**0.5
-        force = self.f_c
 
-        a_c_x = direction_to_center[0]/h * force
-        a_c_y = direction_to_center[1]/h * force
+        a_c_x = direction_to_center[0]/self.r * self.f_c
+        a_c_y = direction_to_center[1]/self.r * self.f_c
 
         self.v.x += a_c_x
         self.v.y += a_c_y
 
         self.x += self.v.x
         self.y += self.v.y
-        # print(f"After: {self.x}")
 
     def draw(self):
         app.fill(*next(self.rainbow))
         app.noStroke()
-        app.circle(self.x, self.y, 5)
+        app.ellipse(self.x, self.y, 5, 5)
 
 
 class SmallMass:
@@ -79,7 +76,7 @@ class SmallMass:
 
     def draw(self):
         app.fill(40, 35, 180)
-        app.circle(self.x, self.y, self.m*10)
+        app.ellipse(self.x, self.y, self.m*10, self.m*10)
 
 def rainbow():
     h = 0
